@@ -25,7 +25,7 @@ for i in range(0, case_num):
     str1 = str1 + '      break;\n'
     f.write(str1)
 str1 = '''    default:
-      assert(false);
+      throw(std::runtime_error("Converter, Not Implement for bond number larger than 10.\\n"));
 '''
 f.write(str1)
 f.write('  }\n')
@@ -44,7 +44,7 @@ for i in range(0, case_num):
     str1 = str1 + '      break;\n'
     f.write(str1)
 str1 = '''    default:
-      assert(false);
+      throw(std::runtime_error("Converter, Not Implement for bond number larger than 10.\\n"));
 '''
 f.write(str1)
 f.write('  }\n')
@@ -77,20 +77,64 @@ for i in range(1, case_num):
     f.write(str1)
     str1 = '            cytnx_T.at({' + str2 + '}) = eltC(itensor_T, ' + str3 + ');\n          }'
     f.write(str1)
-    str1 = ' else {assert(false);}\n'
+    str1 = ' else {\n            throw(std::runtime_error("Converter, Check itensor data type (real or complex)"));\n          }    \n'
+    f.write(str1)
+    str1 = '          break;\n'
     f.write(str1)
     str1 = '        case cvt_case::to_itensor: \n'
     f.write(str1)
-    str1 = '          switch (cytnx_T.dtype()) {\n            case cytnx::Type.Double: {\n'
-    str1 = str1 + '              auto val_r = cytnx_T.at<cytnx::cytnx_double>({' + str2 + '});\n'
+    str1 = '          switch (cytnx_T.dtype()) {\n            case cytnx::Type.ComplexDouble: {\n'
+    str1 = str1 + '              auto val_c = static_cast<cytnx::cytnx_complex128>(cytnx_T.at<cytnx::cytnx_complex128>({' + str2 + '}));\n'
+    str1 = str1 + '              itensor_T.set(' + str3 + ', val_c);\n              break;\n            }\n'
+    f.write(str1)
+    str1 = '            case cytnx::Type.ComplexFloat: {\n'
+    str1 = str1 + '              auto val_c = static_cast<cytnx::cytnx_complex128>(cytnx_T.at<cytnx::cytnx_complex64>({' + str2 + '}));\n'
+    str1 = str1 + '              itensor_T.set(' + str3 + ', val_c);\n              break;\n            }\n'
+    f.write(str1)
+    str1 = '            case cytnx::Type.Double: {\n'
+    str1 = str1 + '              auto val_r = static_cast<cytnx::cytnx_double>(cytnx_T.at<cytnx::cytnx_double>({' + str2 + '}));\n'
     str1 = str1 + '              itensor_T.set(' + str3 + ', val_r);\n              break;\n            }\n'
     f.write(str1)
-    str1 = '            case cytnx::Type.ComplexDouble: {\n'
-    str1 = str1 + '              auto val_c = cytnx_T.at<cytnx::cytnx_complex128>({' + str2 + '});\n'
-    str1 = str1 + '              itensor_T.set(' + str3 + ', val_c);\n              break;\n            }\n          }'
-    f.write(str1 + '\n      }\n    }\n')
-    f.write('}\n')
-f.write('}\n')
+    str1 = '            case cytnx::Type.Float: {\n'
+    str1 = str1 + '              auto val_r = static_cast<cytnx::cytnx_double>(cytnx_T.at<cytnx::cytnx_float>({' + str2 + '}));\n'
+    str1 = str1 + '              itensor_T.set(' + str3 + ', val_r);\n              break;\n            }\n'
+    f.write(str1)
+    str1 = '            case cytnx::Type.Int64: {\n'
+    str1 = str1 + '              auto val_r = static_cast<cytnx::cytnx_double>(cytnx_T.at<cytnx::cytnx_int64>({' + str2 + '}));\n'
+    str1 = str1 + '              itensor_T.set(' + str3 + ', val_r);\n              break;\n            }\n'
+    f.write(str1)
+    str1 = '            case cytnx::Type.Uint64: {\n'
+    str1 = str1 + '              auto val_r = static_cast<cytnx::cytnx_double>(cytnx_T.at<cytnx::cytnx_uint64>({' + str2 + '}));\n'
+    str1 = str1 + '              itensor_T.set(' + str3 + ', val_r);\n              break;\n            }\n'
+    f.write(str1)
+    str1 = '            case cytnx::Type.Int32: {\n'
+    str1 = str1 + '              auto val_r = static_cast<cytnx::cytnx_double>(cytnx_T.at<cytnx::cytnx_int32>({' + str2 + '}));\n'
+    str1 = str1 + '              itensor_T.set(' + str3 + ', val_r);\n              break;\n            }\n'
+    f.write(str1)
+    str1 = '            case cytnx::Type.Uint32: {\n'
+    str1 = str1 + '              auto val_r = static_cast<cytnx::cytnx_double>(cytnx_T.at<cytnx::cytnx_uint32>({' + str2 + '}));\n'
+    str1 = str1 + '              itensor_T.set(' + str3 + ', val_r);\n              break;\n            }\n'
+    f.write(str1)
+    str1 = '            case cytnx::Type.Int16: {\n'
+    str1 = str1 + '              auto val_r = static_cast<cytnx::cytnx_double>(cytnx_T.at<cytnx::cytnx_int16>({' + str2 + '}));\n'
+    str1 = str1 + '              itensor_T.set(' + str3 + ', val_r);\n              break;\n            }\n'
+    f.write(str1)
+    str1 = '            case cytnx::Type.Uint16: {\n'
+    str1 = str1 + '              auto val_r = static_cast<cytnx::cytnx_double>(cytnx_T.at<cytnx::cytnx_uint16>({' + str2 + '}));\n'
+    str1 = str1 + '              itensor_T.set(' + str3 + ', val_r);\n              break;\n            }\n'
+    f.write(str1)
+    str1 = '            default: {\n'
+    str1 = str1 + '              throw(std::logic_error("Converter:Cannot convert Bool or Void type.\\n"));'
+    str1 = str1 + '''
+            } // default
+          } // switch type
+          break;
+      } // switch cvt case
+    } // if exist
+} // ElemCvt
+'''
+    f.write(str1)
+f.write('} // namespace\n')
 
 
 f.close()

@@ -123,8 +123,9 @@ cytnx::UniTensor ToCytnxUniTensor (const itensor::ITensor& itensor_T) {
   cytnx::cytnx_int64 row_rank = -1;
   auto dtype = itensor::isReal(itensor_T) ? 
                cytnx::Type.Double : cytnx::Type.ComplexDouble;
+  bool is_diag = !isDense(itensor_T);
   auto cytnx_T = cytnx::UniTensor(bonds, labels, row_rank, dtype, 
-                                  cytnx::Device.cpu, false);
+                                  cytnx::Device.cpu, is_diag);
   CytnxConverter::ElemWiseITensorToCytnx(itensor_T, &cytnx_T);
   return cytnx_T;
 }
@@ -147,7 +148,8 @@ itensor::ITensor ToITensorITensor (const cytnx::UniTensor& cytnx_T) {
     indices.push_back(index);
     i++;
   }
-  auto itensor_T = itensor::ITensor(indices);
+  auto itensor_T = cytnx_T.is_diag() ? 
+      itensor::delta(indices) : itensor::ITensor(indices);
   CytnxConverter::ElemWiseCytnxToITensor(cytnx_T, &itensor_T);
   return itensor_T;
 }

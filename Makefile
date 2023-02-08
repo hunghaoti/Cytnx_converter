@@ -29,22 +29,27 @@ ITENSOR_CXXFLAGS:=-std=c++17
 ITENSOR_HEADER:=$(ITENSOR_ROOT)
 ITENSOR_LIBDIR:=$(ITENSOR_ROOT)/lib
 
-obj:=elem_wise_cvt.o cytnx_converter.o
+SRC := .
+OBJDIR:=objs
+
+SOURCES := $(wildcard $(SRC)/*.cpp)
+SOURCES := $(filter-out $(SRC)/main.cpp $(SRC)/test.cpp, $(SOURCES))
+OBJECTS := $(patsubst $(SRC)/%.cpp, $(OBJDIR)/%.o, $(SOURCES))
+
 exe: test.e main.e
 
-%.e:$(obj) %.o
-	$(CC) $(ITENSOR_CXXFLAGS) $(CYTNX_CXXFLAGS) -I$(ITENSOR_HEADER) -I${CYTNX_INC} -L$(ITENSOR_LIBDIR) $^ -o $@ $(CYTNX_LIB) -litensor -pthread $(CYTNX_LDFLAGS)
+%.e:$(OBJECTS) $(OBJDIR)/%.o
+	$(CC) $(ITENSOR_CXXFLAGS) $(CYTNX_CXXFLAGS) -I$(ITENSOR_HEADER) -I${CYTNX_INC} -L$(ITENSOR_LIBDIR) -I$(SRC) $^ -o $@ $(CYTNX_LIB) -litensor -pthread $(CYTNX_LDFLAGS)
 
-
-%.o:%.cpp
-	echo $(CYTNX_ENV_ROOT)
-	$(CC) $(ITENSOR_CXXFLAGS) $(CYTNX_CXXFLAGS) -I$(ITENSOR_HEADER) -I${CYTNX_INC} -L$(CYTNX_LIB) $< -c
-
+$(OBJDIR)/%.o:$(SRC)/%.cpp
+	mkdir -p objs
+	$(CC) $(ITENSOR_CXXFLAGS) $(CYTNX_CXXFLAGS) -I$(ITENSOR_HEADER) -I${CYTNX_INC} -L$(CYTNX_LIB) -I$(SRC) $< -o $@ -c
 
 #clean
 .phony: clean
 
 clean:
-	rm -f *.o *.e *.gcda *.gcno
+	rm -r objs
+	rm *.e
 
 
