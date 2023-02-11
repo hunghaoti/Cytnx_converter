@@ -1,9 +1,9 @@
 #install root
-CYTNX_ROOT=$(HOME)/libraries/Cytnx_bkUT_lib
-ITENSOR_ROOT:=$(HOME)/install/itensor
+CYTNX_ROOT:=/home/j9263178/cytnx_bk_new
+ITENSOR_ROOT:=/home/j9263178/itensor
 
 #conda cytnx environment path, ex, $(HOME)/anaconda3/envs/cytnx
-CYTNX_CONDA_ENV_ROOT:=$(HOME)/anaconda3/envs/cytnx
+CYTNX_CONDA_ENV_ROOT:=/home/j9263178/anaconda3/envs/cytnx4
 CYTNX_CONDA_ENV_LIBDIR:=$(CYTNX_CONDA_ENV_ROOT)/lib/
 
 CC := g++
@@ -16,7 +16,7 @@ CC := g++
 
 CYTNX_INC :=$(CYTNX_ROOT)/include
 CYTNX_LIB :=$(CYTNX_ROOT)/lib64/libcytnx.a
-CYTNX_CXXFLAGS :=-I$(CYTNX_CONDA_ENV_ROOT) -fvisibility-inlines-hidden -fmessage-length=0 -march=nocona -mtune=haswell -ftree-vectorize -fPIC -fstack-protector-strong -fno-plt -O2 -ffunction-sections -pipe -isystem /home/hunghaoti/anaconda3/envs/cytnx/include -Wformat=0 -w -g -fprofile-arcs -ftest-coverage -fopenmp -DUNI_HPTT
+CYTNX_CXXFLAGS :=-I$(CYTNX_CONDA_ENV_ROOT) -fvisibility-inlines-hidden -fmessage-length=0 -march=nocona -mtune=haswell -ftree-vectorize -fPIC -fstack-protector-strong -fno-plt -O2 -ffunction-sections -pipe -isystem /home/j9263178/anaconda3/envs/cytnx4/include -Wformat=0 -w -g -fprofile-arcs -ftest-coverage -fopenmp -DUNI_HPTT
 CYTNX_LDFLAGS :=\
 	$(CYTNX_CONDA_ENV_LIBDIR)libmkl_intel_ilp64.so \
 	$(CYTNX_CONDA_ENV_LIBDIR)libmkl_intel_thread.so \

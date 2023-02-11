@@ -1,5 +1,5 @@
 #install root
-ITENSOR_ROOT:=$(HOME)/install/itensor
+ITENSOR_ROOT:=/home/j9263178/itensor
 
 CC := g++
 
@@ -20,10 +20,11 @@ SOURCES := $(wildcard $(GEN_SRC)/*.cpp)
 OBJECTS := $(patsubst $(GEN_SRC)/%.cpp, $(OBJDIR)/%.o, $(SOURCES))
 
 gen_test_data_main.e:$(OBJECTS)
-	$(CC) $(ITENSOR_CXXFLAGS) -I$(ITENSOR_HEADER) -I$(GOOGLETEST_INC) -L$(ITENSOR_LIBDIR) $^ -o $@ -litensor -lpthread -lopenblas $(GOOGLETEST_LIB)
+	$(CC) $(ITENSOR_CXXFLAGS) -I$(ITENSOR_HEADER) -I$(GOOGLETEST_INC) -L$(ITENSOR_LIBDIR) -I/home/j9263178/anaconda3/envs/cytnx4/include/ $^ -o $@ -litensor -L/home/j9263178/anaconda3/envs/cytnx4/lib -lmkl_intel_lp64 -lmkl_intel_thread -lmkl_rt -lmkl_core -liomp5 -lpthread $(GOOGLETEST_LIB)
 
 $(OBJDIR)/%.o:$(GEN_SRC)/%.cpp
-	$(CC) $(ITENSOR_CXXFLAGS) -I$(ITENSOR_HEADER) -I$(GOOGLETEST_INC) -L$(ITENSOR_LIBDIR) -I$(GEN_SRC) -c $^ -o $@
+	mkdir -p objs
+	$(CC) $(ITENSOR_CXXFLAGS) -I$(ITENSOR_HEADER) -I$(GOOGLETEST_INC) -L$(ITENSOR_LIBDIR) -I/home/j9263178/anaconda3/envs/cytnx4/include/ -L/home/j9263178/anaconda3/envs/cytnx4/lib -lmkl_intel_lp64 -lmkl_intel_thread -lmkl_rt -lmkl_core -liomp5 -I$(GEN_SRC) -c $^ -o $@
 
 
 
